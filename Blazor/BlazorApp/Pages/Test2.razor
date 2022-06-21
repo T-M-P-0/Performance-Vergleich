@@ -1,0 +1,207 @@
+﻿@page "/test2"
+
+@using System.Collections.Generic
+@using System.Diagnostics
+@using ViewModels
+@using Testing
+
+<PageTitle>Test 2 | Blazorapp</PageTitle>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Test 2</h1>
+        <button type="button" class="btn btn-primary btn-lg" @onclick="StartStressTest">Start</button>
+    </div>
+</div>
+<div class="row">
+    @foreach (var item in this.Data)
+    {
+        <div class="col-6">
+            <div class="card mt-3">
+                <div class="card-header" style="background-color:rgb(41, 95, 214); color:white">
+                    Person @item.Object.Id
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <InputField Label="Vorname" Text="@item.Object.FirstName" Id="@($"{item.Object.FirstName}_{item.Object.Id}")"
+                                        IsReadonly="@true">
+                                </InputField>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <InputField Label="Nachname" Text="@item.Object.LastName" Id="@($"{item.Object.LastName}_{item.Object.Id}")"
+                                        IsReadonly="@true">
+                                </InputField>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <InputField Label="Adresse" Text="@item.Object.Address" Id="@($"{item.Object.Address}_{item.Object.Id}")" IsReadonly="@false">
+                            </InputField>
+                        </div>
+
+                        <div class="form-group">
+                            <InputField Label="Adresse 2" Text="@item.Object.Address2" Id="@($"{item.Object.Address2}_{item.Object.Id}")" IsReadonly="@false">
+                            </InputField>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <InputField Label="Stadt" Text="@item.Object.City" Id="@($"{item.Object.City}_{item.Object.Id}")" IsReadonly="@false">
+                                </InputField>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <InputField Label="PLZ" Text="@item.Object.ZIP" Id="@($"{item.Object.ZIP}_{item.Object.Id}")" IsReadonly="@false">
+                                </InputField>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <InputField Label="Land" Text="@item.Object.Country" Id="@($"{item.Object.Country}_{item.Object.Id}")" IsReadonly="@false">
+                                </InputField>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@code {
+    private IEnumerable<PersonViewModel> Data = Enumerable.Range(1, amountOfData)
+                                                      .Select(i => new PersonViewModel
+                                                                (new Models.Person
+                                                                    (i,
+                                                                     $"Vorname {i}",
+                                                                     $"Nachname {i}",
+                                                                     $"Adresse - {i}",
+                                                                     $"Adresse 2 - {i}",
+                                                                     $"City {i}",
+                                                                     $"100{i}",
+                                                                     $"Country {i}"
+                                                                     )
+                                                                 ));
+
+    private static readonly int amountOfData = 250;
+
+    private List<long> testResults = new List<long>();
+
+    private bool testStarted;
+
+    private Stopwatch stopwatch = new Stopwatch();
+
+    private async Task StartApdexTest()
+    {
+        this.testStarted = true;
+
+        int sampleSize = 100;
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.Data = new List<PersonViewModel>();
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+
+            this.Data = Enumerable.Range(1, amountOfData)
+                                  .Select(i => new PersonViewModel
+                                            (new Models.Person
+                                                (i,
+                                                 $"Vorname {i}",
+                                                 $"Nachname {i}",
+                                                 $"Adresse - {i}",
+                                                 $"Adresse 2 - {i}",
+                                                 $"City {i}",
+                                                 $"100{i}",
+                                                 $"Country {i}"
+                                                 )
+                                             )).ToList();
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+        }
+
+        this.testStarted = false;
+        long avgRenderResult = this.testResults.Sum() / (this.testResults.Count() / 2);
+
+        ApdexCalculator apdexCalculator = new ApdexCalculator(treshold: avgRenderResult);
+        ApdexResult apdexResult = apdexCalculator.GetApdexScore(this.testResults);
+
+        this.WriteResultToConsole(apdexResult, avgRenderResult);
+        this.testResults.Clear();
+    }
+
+    private async Task StartStressTest()
+    {
+        this.testStarted = true;
+
+        int sampleSize = 1000;
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.Data = new List<PersonViewModel>();
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+
+            this.Data = Enumerable.Range(1, amountOfData)
+                                  .Select(i => new PersonViewModel
+                                            (new Models.Person
+                                                (i,
+                                                 $"Vorname {i}",
+                                                 $"Nachname {i}",
+                                                 $"Adresse - {i}",
+                                                 $"Adresse 2 - {i}",
+                                                 $"City {i}",
+                                                 $"100{i}",
+                                                 $"Country {i}"
+                                                 )
+                                             )).ToList();
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+        }
+
+
+        Console.WriteLine("Stresstest beendet.");
+        Console.WriteLine($"Fertig mit {sampleSize}");
+        Console.WriteLine($"Menge der Daten: {amountOfData}");
+    }
+
+
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+        {
+            if (this.testStarted)
+            {
+                this.stopwatch.Stop();
+                this.testResults.Add(this.stopwatch.ElapsedMilliseconds);
+            }
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        if (this.testStarted)
+        {
+            this.stopwatch.Reset();
+            this.stopwatch.Start();
+        }
+
+        return true;
+    }
+
+    private void WriteResultToConsole(ApdexResult result, long avgRenderResult)
+    {
+        Console.WriteLine($"Durchschnittliche Renderzeit: {avgRenderResult}");
+        Console.WriteLine();
+        Console.WriteLine($"Elemente in der \"Satisfied Zone\": {result.Counter.SatisfiedResultsCount}");
+        Console.WriteLine($"Elemente in der \"Tolerating Zone\": {result.Counter.ToleratingResultsCount}");
+        Console.WriteLine($"Elemente in der \"Frustrating Zone\": {result.Counter.FrustratingResultsCount}");
+        Console.WriteLine($"Anzahl der Proben: {result.SampleSize}");
+        Console.WriteLine($"APDEX Score: {result.ApdexScore}");
+        Console.WriteLine();
+        Console.WriteLine("Alle Render-Resultate:");
+        result.RenderResults.ForEach(item => Console.WriteLine($"Zeit für das entfernen der Elemente: {item.TimeForRemovingElements}ms\nZeit für das hinzufügen der Elemente: {item.TimeForAddingElements}ms => Gesamt: {item.TotalTime}"));
+    }
+}

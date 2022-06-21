@@ -1,0 +1,41 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Test 3</h1>
+        <button type="button" class="btn btn-primary btn-lg" {{on "click" this.startStressTest }}>Start</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {{#each this.rows}}
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <h2 style="color:rgb(41, 95, 214)">Beispieltext</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                    mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
+                    mollis euismod. Donec sed odio dui. </p>
+                <p><a class="btn btn-secondary" href="https://ember.com/" target="_blank"
+                        role="button" rel="noopener noreferrer">Visit &rarr;</a></p>
+            </div>
+            <div class="col-md-5 mt-3">
+                <div class="container">
+                    <img src="assets/work.jpg" class="img-fluid img-thumbnail"
+                        alt="Ember">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h2 style="color:rgb(41, 95, 214)">Beispieltext</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
+                    mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna
+                    mollis euismod. Donec sed odio dui. </p>
+                <p><a class="btn btn-secondary" href="https://ember.com/" target="_blank"
+                        role="button" rel="noopener noreferrer">Visit &rarr;</a></p>
+            </div>
+            <div class="container col-12" style="width:fit-content; height:fit-content">
+                <img src="assets/nasa.jpg" target="_blank"
+                    class="img-fluid rounded-circle" alt="Ember">
+            </div>
+        </div>
+        {{/each }}
+    </div>
+</div>

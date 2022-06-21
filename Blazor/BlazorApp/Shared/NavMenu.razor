@@ -1,0 +1,62 @@
+﻿<nav class="sticky navbar navbar-expand-md navbar-dark bg-dark col-12 col-md-3 col-lg-2  pt-md-3 pl-md-2 pl-xl-3 d-flex d-md-block">
+    <a class="navbar-brand" href="/">
+        @Title
+    </a>
+    <hr />
+
+    <div id="sidebar">
+        <ul class="nav nav-pills flex-column navbar-nav d-block mr-auto">
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <NavLink href="/" class="nav-link text-white" Match="NavLinkMatch.All">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#home"></use>
+                    </svg>
+                    Home
+                </NavLink>
+            </li>
+
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <NavLink href="test1" class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    Test 1
+                </NavLink>
+            </li>
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <NavLink href="test2" class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    Test 2
+                </NavLink>
+            </li>
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <NavLink href="test3" class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    Test 3
+                </NavLink>
+            </li>
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <NavLink href="test4" class="nav-link text-white">
+                    <svg class="bi me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    Test 4
+                </NavLink>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+@code {
+    [Parameter]
+    public string Title
+    {
+        get;
+        set;
+    } = string.Empty;
+}

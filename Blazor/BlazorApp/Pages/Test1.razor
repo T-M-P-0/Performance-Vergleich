@@ -1,0 +1,211 @@
+﻿@page "/test1"
+
+@using System.Collections.Generic
+@using System.Diagnostics
+@using ViewModels
+@using Testing;
+
+<PageTitle>Test 1 | Blazorapp</PageTitle>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Test 1</h1>
+        <button type="button" class="btn btn-primary btn-lg" @onclick="StartStressTest">Start</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="mt-3">
+        <table class="table table-bordered table-hover table-striped">
+            <thead style="background-color:rgb(41, 95, 214); color:white">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Vorname</th>
+                    <th scope="col">Nachname</th>
+                    <th scope="col">Adresse 1</th>
+                    <th scope="col">Adresse 2</th>
+                    <th scope="col">Stadt</th>
+                    <th scope="col">PLZ</th>
+                    <th scope="col">Land</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (this.Data != null)
+                {
+                    @foreach (var item in this.Data)
+                    {
+                        <tr>
+                            <th>
+                                <button type="button" class="btn btn-outline-primary">Button</button>
+                            </th>
+                            <th scope="row">
+                                @item.Object.Id
+                            </th>
+                            <td scope="row">
+                                @item.Object.FirstName
+                            </td>
+                            <td scope="row">
+                                @item.Object.LastName
+                            </td>
+                            <td scope="row">
+                                @item.Object.Address
+                            </td>
+                            <td scope="row">
+                                @item.Object.Address2
+                            </td>
+                            <td scope="row">
+                                @item.Object.City
+                            </td>
+                            <td scope="row">
+                                @item.Object.ZIP
+                            </td>
+                            <td scope="row">
+                                @item.Object.Country
+                            </td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@code {
+    private IEnumerable<PersonViewModel> Data = Enumerable.Range(1, amountOfData)
+                                                      .Select(i => new PersonViewModel
+                                                                (new Models.Person
+                                                                    (i,
+                                                                     $"Vorname {i}",
+                                                                     $"Nachname {i}",
+                                                                     $"Adresse - {i}",
+                                                                     $"Adresse 2 - {i}",
+                                                                     $"City {i}",
+                                                                     $"100{i}",
+                                                                     $"Country {i}"
+                                                                     )
+                                                                 ));
+
+    private static readonly int amountOfData = 1000;
+
+    private List<long> testResults = new List<long>();
+
+    private bool testStarted;
+
+    private Stopwatch stopwatch = new Stopwatch();
+
+    private async Task StartApdexTest()
+    {
+        this.testStarted = true;
+
+        int sampleSize = 100;
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.Data = new List<PersonViewModel>();
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+
+            this.Data = Enumerable.Range(1, amountOfData)
+                                  .Select(i => new PersonViewModel
+                                            (new Models.Person
+                                                (i,
+                                                 $"Vorname {i}",
+                                                 $"Nachname {i}",
+                                                 $"Adresse - {i}",
+                                                 $"Adresse 2 - {i}",
+                                                 $"City {i}",
+                                                 $"100{i}",
+                                                 $"Country {i}"
+                                                 )
+                                             )).ToList();
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+        }
+
+        this.testStarted = false;
+        long avgRenderResult = this.testResults.Sum() / (this.testResults.Count() / 2);
+
+        ApdexCalculator apdexCalculator = new ApdexCalculator(treshold: avgRenderResult);
+        ApdexResult apdexResult = apdexCalculator.GetApdexScore(this.testResults);
+
+        this.WriteResultToConsole(apdexResult, avgRenderResult);
+        this.testResults.Clear();
+    }
+
+    private async Task StartStressTest()
+    {
+        this.testStarted = true;
+
+        int sampleSize = 1000;
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.Data = new List<PersonViewModel>();
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+
+            this.Data = Enumerable.Range(1, amountOfData)
+                                  .Select(i => new PersonViewModel
+                                            (new Models.Person
+                                                (i,
+                                                 $"Vorname {i}",
+                                                 $"Nachname {i}",
+                                                 $"Adresse - {i}",
+                                                 $"Adresse 2 - {i}",
+                                                 $"City {i}",
+                                                 $"100{i}",
+                                                 $"Country {i}"
+                                                 )
+                                             )).ToList();
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+        }
+
+
+        Console.WriteLine("Stresstest beendet.");
+        Console.WriteLine($"Fertig mit {sampleSize}");
+        Console.WriteLine($"Menge der Daten: {amountOfData}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+        {
+            if (this.testStarted)
+            {
+                this.stopwatch.Stop();
+                this.testResults.Add(this.stopwatch.ElapsedMilliseconds);
+            }
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        if (this.testStarted)
+        {
+            this.stopwatch.Reset();
+            this.stopwatch.Start();
+        }
+
+        return true;
+    }
+
+    private void WriteResultToConsole(ApdexResult result, long avgRenderResult)
+    {
+        Console.WriteLine($"Durchschnittliche Renderzeit: {avgRenderResult}");
+        Console.WriteLine();
+        Console.WriteLine($"Elemente in der \"Satisfied Zone\": {result.Counter.SatisfiedResultsCount}");
+        Console.WriteLine($"Elemente in der \"Tolerating Zone\": {result.Counter.ToleratingResultsCount}");
+        Console.WriteLine($"Elemente in der \"Frustrating Zone\": {result.Counter.FrustratingResultsCount}");
+        Console.WriteLine($"Anzahl der Proben: {result.SampleSize}");
+        Console.WriteLine($"APDEX Score: {result.ApdexScore}");
+        Console.WriteLine();
+        Console.WriteLine("Alle Render-Resultate:");
+        result.RenderResults.ForEach(item => Console.WriteLine($"Zeit für das entfernen der Elemente: {item.TimeForRemovingElements}ms\nZeit für das hinzufügen der Elemente: {item.TimeForAddingElements}ms => Gesamt: {item.TotalTime}"));
+    }
+}

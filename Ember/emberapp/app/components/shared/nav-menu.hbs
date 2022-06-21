@@ -1,0 +1,55 @@
+<nav
+  class="col-12 col-md-3 col-lg-2 navbar navbar-expand-md navbar-dark bg-dark pt-md-3 pl-md-2 pl-xl-3 d-flex d-md-block">
+  <a class="navbar-brand" href="#">
+    <i class="fas fa-cog"></i>
+    Ember App
+  </a>
+  <hr />
+
+  <div id="sidebar">
+    <ul class="nav nav-pills flex-column navbar-nav d-block mr-auto">
+      <li class="nav-item w-100 btn btn-dark text-left">
+        <LinkTo @route="index" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#home"></use>
+          </svg>
+          Home
+          <span class="sr-only">(current)</span>
+        </LinkTo>
+      </li>
+
+      <li class="nav-item w-100 btn btn-dark text-left">
+        <LinkTo @route="testpage1" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#speedometer2"></use>
+          </svg>
+          Test 1
+        </LinkTo>
+      </li>
+      <li class="nav-item w-100 btn btn-dark text-left">
+        <LinkTo @route="testpage2" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#speedometer2"></use>
+          </svg>
+          Test 2
+        </LinkTo>
+      </li>
+      <li class="nav-item w-100 btn btn-dark text-left">
+        <LinkTo @route="testpage3" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#speedometer2"></use>
+          </svg>
+          Test 3
+        </LinkTo>
+      </li>
+      <li class="nav-item w-100 btn btn-dark text-left">
+        <LinkTo @route="testpage4" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#speedometer2"></use>
+          </svg>
+          Test 4
+        </LinkTo>
+      </li>
+    </ul>
+  </div>
+</nav>

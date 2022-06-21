@@ -1,0 +1,60 @@
+﻿@page "/test4"
+
+@using System.Diagnostics
+
+@inject IJSRuntime JS
+
+<PageTitle>Test 4 | Blazorapp</PageTitle>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Test 4</h1>
+        <button type="button" class="btn btn-primary btn-lg" @onclick="StartTest">Start</button>
+    </div>
+</div>
+
+<div class="container">
+    <canvas id="@this.canvasId" style="border: 1px solid #000000" width="@this.data.Width" height="@this.data.Height" />
+</div>
+@code {
+    private Models.MandelbrotData data =
+        new Models.MandelbrotData(width: 1000, height: 1000, reStart: -2, reEnd: 2, imStart: -1, imEnd: 1);
+
+    private Models.Mandelbrot mandelbrot = new Models.Mandelbrot(2000);
+
+    private string canvasId = "canvasId";
+
+    private Stopwatch stopwatch = new Stopwatch();
+
+    private async Task StartTest()
+    {
+        Console.WriteLine("Werte des Mandelbrots:");
+        Console.WriteLine($"Höhe: {this.data.Height}");
+        Console.WriteLine($"Breite: {this.data.Width}");
+        Console.WriteLine($"Maximale Anzahl an iterationen: {this.mandelbrot.MaxIterations}");
+
+        this.stopwatch.Start();
+
+        var pixels = await Task.Run(() =>  this.mandelbrot.GeneratePixels(
+        this.data.Height,
+        this.data.Width,
+        this.data.ReStart,
+        this.data.ReEnd,
+        this.data.ImStart,
+        this.data.ImEnd
+        ));
+
+        this.stopwatch.Stop();
+        Console.WriteLine($"Zeit für das berechnen des Mandelbrots: {this.stopwatch.ElapsedMilliseconds}ms");
+
+        this.stopwatch.Reset();
+        this.stopwatch.Start();
+
+        await this.JS.InvokeVoidAsync("setPixels", this.canvasId, pixels);
+
+        this.stopwatch.Stop();
+        Console.WriteLine($"Zeit für das Zeichnen der Pixel in das Canvas: {this.stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine("Stresstest beendet.");
+        this.stopwatch.Reset();
+    }
+}

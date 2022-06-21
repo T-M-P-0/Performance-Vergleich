@@ -1,0 +1,33 @@
+h1:focus {
+    outline: none;
+}
+
+body,
+html,
+.container-fluid {
+    height: 100%;
+}
+
+
+.wrapper {
+    min-height: 100vh;
+    max-height: 100%;
+}
+
+main {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+hr {
+    height: 2px;
+    border-width: 0;
+    color: gray;
+    background-color: gray;
+}
+
+.bi {
+    vertical-align: -0.125em;
+    pointer-events: none;
+    fill: currentColor;
+}

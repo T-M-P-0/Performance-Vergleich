@@ -1,0 +1,15 @@
+﻿<label for="@this.Id">@Label</label>
+<input id="@this.Id" type="text" class="form-control" value="@this.Text" readonly="@this.IsReadonly" />
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool IsReadonly { get; set; }
+}

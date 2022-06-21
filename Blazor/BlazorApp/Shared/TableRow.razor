@@ -1,0 +1,18 @@
+﻿<tr class="@this.MarkedCss">
+      @ChildContent
+</tr>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsMarked { get; set; }
+
+    private string MarkedCss => this.IsMarked ? "table-info" : string.Empty;
+
+    private void Mark()
+    {
+        this.IsMarked = !this.IsMarked;
+    }
+}

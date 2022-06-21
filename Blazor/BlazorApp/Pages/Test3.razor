@@ -1,0 +1,156 @@
+﻿@page "/test3"
+
+
+@using System.Collections.Generic
+@using System.Diagnostics
+@using ViewModels
+@using Testing
+
+<PageTitle>Test 3 | Blazorapp</PageTitle>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Test 3</h1>
+        <button type="button" class="btn btn-primary btn-lg" @onclick="StartStressTest">Start</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @for (int i = 0; i < amountOfRows; i++)
+        {
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <h2 style="color:rgb(41, 95, 214)">Beispieltext</h2>
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                    <p>
+                        <a class="btn btn-secondary" href="https://docs.microsoft.com/aspnet/" target="_blank"
+                       role="button" rel="noopener noreferrer">Visit &rarr;</a>
+                    </p>
+                </div>
+                <div class="col-md-5 mt-3">
+                    <div class="container">
+                        <img src="work.jpg" class="img-fluid img-thumbnail" alt="Work">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h2 style="color:rgb(41, 95, 214)">Beispieltext</h2>
+                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                    <p>
+                        <a class="btn btn-secondary" href="https://docs.microsoft.com/aspnet/" target="_blank"
+                       role="button" rel="noopener noreferrer">Visit &rarr;</a>
+                    </p>
+                </div>
+                <div class="container col-12" style="width:fit-content; height:fit-content">
+                    <img src="nasa.jpg" target="_blank" class="img-fluid rounded-circle" alt="Nasa">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@code {
+    private int amountOfRows = amountOfData;
+
+    private static readonly int amountOfData = 500;
+
+    private List<long> testResults = new List<long>();
+
+    private bool testStarted;
+
+    private Stopwatch stopwatch = new Stopwatch();
+
+    private ApdexCalculator apdexCalculator = new ApdexCalculator(treshold: 185);
+
+    private async Task StartApdexTest()
+    {
+        this.testStarted = true;
+
+        int sampleSize = 100;
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.amountOfRows = 0;
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+
+            this.amountOfRows = amountOfData;
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+        }
+
+        this.testStarted = false;
+
+        long avgRenderResult = this.testResults.Sum() / (this.testResults.Count() / 2);
+
+        ApdexCalculator apdexCalculator = new ApdexCalculator(treshold: avgRenderResult);
+        ApdexResult apdexResult = apdexCalculator.GetApdexScore(this.testResults);
+
+        this.WriteResultToConsole(apdexResult, avgRenderResult);
+        this.testResults.Clear();
+    }
+
+    private async Task StartStressTest()
+    {
+        this.testStarted = true;
+        int sampleSize = 1000;
+
+        for (var i = 0; i < sampleSize; i++)
+        {
+            this.amountOfRows = 0;
+
+            this.StateHasChanged();
+            await Task.Delay(1);
+
+            this.amountOfRows = amountOfData;
+            this.StateHasChanged();
+
+            await Task.Delay(1);
+        }
+
+
+        Console.WriteLine("Stresstest beendet.");
+        Console.WriteLine($"Fertig mit {sampleSize}");
+        Console.WriteLine($"Menge der Daten: {amountOfData}");
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+        {
+            if (this.testStarted)
+            {
+                this.stopwatch.Stop();
+                this.testResults.Add(this.stopwatch.ElapsedMilliseconds);
+            }
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        if (this.testStarted)
+        {
+            this.stopwatch.Reset();
+            this.stopwatch.Start();
+        }
+
+        return true;
+    }
+
+    private void WriteResultToConsole(ApdexResult result, long avgRenderResult)
+    {
+        Console.WriteLine($"Durchschnittliche Renderzeit: {avgRenderResult}");
+        Console.WriteLine();
+        Console.WriteLine($"Elemente in der \"Satisfied Zone\": {result.Counter.SatisfiedResultsCount}");
+        Console.WriteLine($"Elemente in der \"Tolerating Zone\": {result.Counter.ToleratingResultsCount}");
+        Console.WriteLine($"Elemente in der \"Frustrating Zone\": {result.Counter.FrustratingResultsCount}");
+        Console.WriteLine($"Anzahl der Proben: {result.SampleSize}");
+        Console.WriteLine($"APDEX Score: {result.ApdexScore}");
+        Console.WriteLine();
+        Console.WriteLine("Alle Render-Resultate:");
+        result.RenderResults.ForEach(item => Console.WriteLine($"Zeit für das entfernen der Elemente: {item.TimeForRemovingElements}ms\nZeit für das hinzufügen der Elemente: {item.TimeForAddingElements}ms => Gesamt: {item.TotalTime}"));
+    }
+
+}

@@ -1,0 +1,14 @@
+{{! template-lint-disable no-inline-styles }}
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-3">Test 4</h1>
+    <button type="button" class="btn btn-primary btn-lg" {{ on "click" this.startTest }}>Start</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="img-fluid">
+    <canvas style="border:1px solid #000000;" id="{{this.canvasId}}" width="{{this.data.width}}"
+      height="{{this.data.height}}"></canvas>
+  </div>
+</div>

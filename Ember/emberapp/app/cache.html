@@ -1,0 +1,132 @@
+/* html,
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+} */
+/* 
+main {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100vh;
+  height: -webkit-fill-available;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+main {
+  flex: 1;
+}
+<nav class="col-12 col-md-3 col-lg-2   navbar navbar-expand-md   navbar-dark bg-dark   pt-md-3 pl-md-2 pl-xl-3  d-flex d-md-block">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-cog"></i> Administration
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse mt-md-1" id="sidebar">
+            <ul class="navbar-nav d-block mr-auto">
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <a class="nav-link active" href="#">
+                Dashboard <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item w-100 btn btn-dark text-left">
+                <a class="nav-link" href="#">
+                Orders
+                </a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+{{!-- <main>
+
+  <NavMenu />
+
+  <article class="content px-4 mt-2">
+    {{! <div class="top-row px-4" style="width: 500;">
+      <a href="https://docs.microsoft.com/aspnet/">about blazor</a>
+    </div> }}
+      {{outlet}}
+  </article>
+</main> --}}
+
+{{!-- <div class="page">
+  <div class="sidebar">
+    <NavMenu />
+  </div>
+  <main>
+    <div class="top-row px-4">
+      <a href="https://docs.microsoft.com/aspnet/">About Blazor</a>
+    </div>
+
+    <article class="content px-4">
+      {{outlet}}
+    </article>
+  </main>
+</div> --}}
+
+
+
+
+<nav
+  class="col-12 col-md-3 col-lg-2 navbar navbar-expand-md navbar-dark bg-dark pt-md-3 pl-md-2 pl-xl-3 d-md-block"
+  style="width: 280px;"
+>
+   <a class="navbar-brand" href="#">
+        <i class="fas fa-cog"></i>
+        Administration
+      </a>
+ 
+  <div class="navbar-collapse collapse mt-md-1" id="sidebar">
+        <ul class="navbar-nav d-block mr-auto">
+          <li class="nav-item w-100 btn btn-dark text-left">
+            <a class="nav-link active" href="#">
+              Dashboard
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item w-100 btn btn-dark text-left">
+            <a class="nav-link" href="#">
+              Orders
+            </a>
+          </li>
+        </ul>
+      </div>
+  <ul class="navbar-nav d-block mr-auto">
+    <li class="nav-item">
+     
+    </li>
+
+    <li class="nav-item">
+      <LinkTo @route="testpage1" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use
+            xlink:href="#speedometer2"
+          ></use></svg>
+        Test1
+      </LinkTo>
+    </li>
+    <li class="nav-item">
+      <LinkTo @route="testpage2" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use
+            xlink:href="#speedometer2"
+          ></use></svg>
+        Test2
+      </LinkTo>
+    </li>
+    <li class="nav-item">
+      <LinkTo @route="testpage3" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use
+            xlink:href="#speedometer2"
+          ></use></svg>
+        Test3
+      </LinkTo>
+    </li>
+    <li class="nav-item">
+      <LinkTo @route="testpage4" class="nav-link text-white">
+        <svg class="bi me-2" width="16" height="16"><use
+            xlink:href="#speedometer2"
+          ></use></svg>
+        Test3
+      </LinkTo>
+    </li>
+  </ul>
+</nav>
