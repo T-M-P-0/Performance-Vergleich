@@ -1,0 +1,16 @@
+# Übersicht zu der benötigten Programme
+
+**Für die JavaScript Applikationen:**
+
+1. Installtion von npm:
+  * Dafür kann man NodeJS installieren
+    [NodeJS](https://nodejs.org/en/download/), welches
+    npm inkludiert
+2. Installieren von `serve` als statischer File Server:
+
+`npm install -g serve`
+
+**Für Blazor WebAssembly:**
+
+1. Installation von .NET SDK, welcher die .NET CLI
+beinhaltet: [.NET SDK](https://dotnet.microsoft.com/en-us/download)

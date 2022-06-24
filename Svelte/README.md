@@ -1,19 +1,15 @@
-# Svelte
+# Svelte Startup
 
-* Template(Source) 
-`npx degit sveltejs/template svelte-spa-router-app`
-https://svelte.dev/docs#component-format-script-1-export-creates-a-component-prop:
+1. In den Ordner der Applikation navigieren (in dem Fall `svelteapp`)
 
-Because Svelte's reactivity is based on assignments, using array methods like .push() and .splice() won't automatically trigger updates. 
-A subsequent assignment is required to trigger the update. This and more details can also be found in the tutorial.
+2. Abhängikeiten installieren:
 
-Start der Applikation:
+`npm install`
 
-For Dev
+2. Build erstellen mit: 
 
-npm run dev
+`npm run build`
 
-For Prod
-npm run build 
+3. Starten (Hosten der statischen Files):
 
-npm run start
+`serve -s .\public\`

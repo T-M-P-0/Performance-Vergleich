@@ -1,33 +1,24 @@
 # VUE
 
-## Setup
+## VUE Startup
 
-* Erstellen eines Projekts:
+1. In den Ordner der Applikation navigieren (in dem Fall `vueapp`)
+
+2. Abhängikeiten installieren:
+
+`npm install`
+
+2. Build erstellen mit: 
+
+`npm run build`
+ 
+3. Starten (Hosten der statischen Files):
+
+`serve -s .\dist\`
+
+## Einstellungen der Vue Applikation:
 
 ```
-vue create vue-app
-```
-
-https://vuejs.org/
-
-* Under the hood, Vue compiles the templates into highly-optimized JavaScript code
-
-* If you are familiar with Virtual DOM concepts and prefer the raw power of JavaScript, 
-you can also directly write render functions instead of templates, with optional JSX support.
-  * note that they do not enjoy the same level of compile-time optimizations as templates
-
-* {{}} : The double mustaches interprets the data as plain text 
-* Real Html can output with v-Html
-
-* DOM Update Timing (https://vuejs.org/guide/essentials/reactivity-fundamentals.html)
-
-* When you mutate reactive state, the DOM is updated automatically. 
-* However, it should be noted that the DOM updates are not applied synchronously. 
-  * Instead, Vue buffers them until the "next tick" in the update cycle to ensure 
-  that each component needs to update only once no matter how many state changes you have made.
-
-
-
 ? Please pick a preset: Manually select features
 ? Check the features needed for your project: Babel, Router, Vuex, Linter
 ? Choose a version of Vue.js that you want to start the project with 3.x
@@ -38,18 +29,4 @@ No
 ? Where do you prefer placing config for Babel, ESLint, etc.? In dedicated config files
 
 ? Save this as a preset for future projects? N
-
-Starten in Production:
-
-npm install 
-
-npm run build
-
-Erzeugt den Build im dist folder
-
-anschließend können kann Applikation mit
-
-serve -i -destinationFolderVonBuld
-
-gestartet werden
-
+```
