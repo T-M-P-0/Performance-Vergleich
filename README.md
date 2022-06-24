@@ -2,7 +2,7 @@
 
 **Für die JavaScript Applikationen:**
 
-1. Installtion von npm:
+1. Installation von npm:
   * Dafür kann man NodeJS installieren
     [NodeJS](https://nodejs.org/en/download/), welches
     npm inkludiert
