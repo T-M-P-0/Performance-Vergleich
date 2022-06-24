@@ -3,9 +3,8 @@
 **Für die JavaScript Applikationen:**
 
 1. Installation von npm:
-  * Dafür kann man NodeJS installieren
-    [NodeJS](https://nodejs.org/en/download/), welches
-    npm inkludiert
+  * Dafür kann man [NodeJS](https://nodejs.org/en/download/) installieren, 
+  welches npm inkludiert
 2. Installieren von `serve` als statischer File Server:
 
 `npm install -g serve`
